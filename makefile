@@ -5,20 +5,22 @@ LDFLAGS=-g
        -Wl,-framework,CoreServices -Wl,-framework,ApplicationServices -pthread -Wl,-rpath,/sw/lib/root \
        -lm -ldl
 
-all: main.o fitness.o
-	g++ $(LDFLAGS) -o cgp main.o #$(LDLIBS)
+all: build clean
+
+build: main.o chromosome.o evolution.o
+	g++ $(LDFLAGS) -o cgp main.o  chromosome.o evolution.o #$(LDLIBS)
 
 main.o: src/main.cpp src/chromosome.h src/evolution.h src/cgp.h
 	g++ $(CPPFLAGS) -c src/main.cpp
 
-evolution.o: src/evolution.cpp src/evolution.h src/chromosome.h src/cgp.h
+evolution.o: chromosome.o src/evolution.cpp src/evolution.h src/chromosome.h src/cgp.h
 	g++ $(CPPFLAGS) -c src/evolution.cpp
 
 chromosome.o: src/chromosome.cpp src/chromosome.h src/cgp.h
-	g++ $(CPPFLAGS) -c src/fitness.cpp
+	g++ $(CPPFLAGS) -c src/chromosome.cpp
 
 clean:
-		rm cgp.exe
+		rm *.o
 
 cleanlog:
 		rm log_*.*

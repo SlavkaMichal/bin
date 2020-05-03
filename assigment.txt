@@ -1,0 +1,9 @@
+Seznamte se aproximačními komponenty (8-bitovými sčítačkami a násobičkami),
+které jsou k dispozici na stránkách výzkumné skupiny
+(https://github.com/ehw-fit/evoapproxlib,
+https://ehw.fit.vutbr.cz/evoapproxlib/).  Pomocí Kartézského genetického
+programování navrhněte filtr pro detekci hran v obraze, který bude využívat
+přesné i některé aproximované komponenty. Navrhněte nejprve filtr s přesnými
+komponentami a potom se snažte navrhnout filtr, který bude mít příkon (t.j.
+suma příkonů komponent) 90%, 80%, ... oproti přesnému. Vyhodnoťte také
+výslednou závislost příkonu a kvality výstupu.
