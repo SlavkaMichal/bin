@@ -2,6 +2,34 @@
 #include <fstream>
 #include "cgp.h"
 
+#include "adders/add8u_0FP.c"
+#include "muls/mul8u_1JFF.c"
+#define ADD(a,b) add8u_0FP(a,b)
+#define MUL(a,b) mul8u_1JFF(a,b)
+//
+//#include "adders/add8u_5QL.c"
+//#include "muls/mul8u_EXZ.c"
+//#define ADD(a,b) add8u_5QL(a,b)
+//#define MUL(a,b) mul8u_EXZ(b,a)
+//
+//#include "adders/add8u_5HQ.c"
+//#include "muls/mul8u_2AC.c"
+//#define ADD(a,b) add8u_5HQ(a,b)
+//#define MUL(a,b) mul8u_2AC(b,a)
+//
+//#include "adders/add8u_099.c"
+//#include "muls/mul8u_185Q.c"
+//#define ADD(a,b) add8u_099(a,b)
+//#define MUL(a,b) mul8u_185Q(b,a)
+//
+//#include "adders/add8u_08V.c"
+//#include "muls/mul8u_FTA.c"
+//#define ADD(a,b) add8u_08V(a,b)
+//#define MUL(a,b) mul8u_FTA(b,a)
+
+//#define ADD(a,b) (a+b)
+//#define MUL(a,b) (a*b)
+
 using namespace std;
 
 //-----------------------------------------------------------------------
@@ -197,12 +225,12 @@ px compute_kernel(chromosome chrom, px *in)
               case 0: *out++ = in1; break;              //in1
               case 1: *out++ = in1 > in2 ? in1 : in2;   break; // min
               case 2: *out++ = in1 < in2 ? in1 : in2;   break; // min
-              case 3: *out++ = in1 + in2;       break; // add
-              case 4: *out++ = in1 - in2;       break; // sub1
-              case 5: *out++ = in2 - in1;       break; // sub2
+              case 3: *out++ = ADD(in1,in2);       break; // add
+              case 4: *out++ = ADD(in1,-in2);       break; // sub1
+              case 5: *out++ = ADD(-in1,in2);       break; // sub2
               case 6: *out++ = in1 & in2;       break; // and
               case 7: *out++ = in1 | in2;       break; // or
-              case 8: *out++ = in1 * in2;      break; // xor
+              case 8: *out++ = MUL(in1,in2);      break; // xor
               case 9: *out++ = in1 ^ in2;      break; // xor
               case 10: *out++ = ~in1;           break; // not in1
               case 11: *out++ = ~in2;           break; // not in2
@@ -365,4 +393,3 @@ void save_img(std::string logfname, int gen, chromosome chrom, px *input)
     delete[] out;
     return;
 }
-
