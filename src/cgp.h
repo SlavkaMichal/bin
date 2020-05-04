@@ -7,7 +7,7 @@
 #define KER_SIZE 3
 
 #define PARAM_M  7        //pocet sloupcu
-#define PARAM_N  5           //pocet radku
+#define PARAM_N  7           //pocet radku
 #define L_BACK   7          //1 (pouze predchozi sloupec)  .. param_m (maximalni mozny rozsah);
 // input image dimensions
 #define ROWS    128
@@ -16,7 +16,7 @@
 #define VERBOSE 1
 #define PARAM_GENERATIONS 100000   //max. pocet generaci evoluce
 #define NO_IMPROVEMENT_STOP 10000  //max. pocet generaci evoluce
-#define PARAM_RUNS 5               //max. pocet behu evoluce
+#define PARAM_RUNS 10               //max. pocet behu evoluce
 #define FUNCTIONS  16              //max. pocet pouzitych funkci bloku (viz fitness() )
 #define PERIODICLOGG  (PARAM_GENERATIONS/2) //po kolika krocich se ma vypsat populace
 #define xPERIODIC_LOG           //zda se ma vypisovat populace
@@ -42,4 +42,6 @@ const int IMG_SIZE = ROWS*COLS;
 //-----------------------------------------------------------------------
 // #include "data/median5.h"
 //#include "adder3.h"
+//#include "adders/adders.h"
+//#include "muls/muls.h"
 #endif

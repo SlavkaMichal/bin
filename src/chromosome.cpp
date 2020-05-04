@@ -2,6 +2,7 @@
 #include <fstream>
 #include "cgp.h"
 
+// SELECT TYPE OF ADDER
 #include "adders/add8u_0FP.c"
 #include "muls/mul8u_1JFF.c"
 #define ADD(a,b) add8u_0FP(a,b)
@@ -35,6 +36,8 @@ using namespace std;
 //-----------------------------------------------------------------------
 // INIT_SL_RNDVAL
 //=======================================================================
+// initialisation of rnd_val array
+//-----------------------------------------------------------------------
 rnd_val init_sl_rndval()
 {
     rnd_val sl_val = new sl_rndval*[PARAM_M];
@@ -206,6 +209,13 @@ void print_chrom(FILE *fout, chromosome p_chrom)
   fprintf(fout,"\n");
 }
 
+//-----------------------------------------------------------------------
+// COMPUTE_KERNEL
+//=======================================================================
+// chrom  - array of genes
+// in     - input
+// return - value of kernel for given input
+//-----------------------------------------------------------------------
 px compute_kernel(chromosome chrom, px *in)
 {
     px in1, in2, fce;
@@ -247,7 +257,13 @@ px compute_kernel(chromosome chrom, px *in)
     return res;
 }
 
-// evaluate array of chromosomes on input
+//-----------------------------------------------------------------------
+// COMPUTE_KERNEL
+//=======================================================================
+// chrom  - array of genes
+// in     - input
+// return - value of kernel for given input
+//-----------------------------------------------------------------------
 void eval_chromosomes(chromosome *chromosomes, px *in, float *fitness, int ref_out)
 {
     px in1, in2, fce;
@@ -259,58 +275,30 @@ void eval_chromosomes(chromosome *chromosomes, px *in, float *fitness, int ref_o
     for (int c = 0; c < POPULATION; c++){
         out = in + INP_SIZE; // reset beggining of output array
         chrom = chromosomes[c];
-        // TODO collapse loops
-        //vyhodnoceni funkce pro sloupec
-        //for (int i=0; i < PARAM_M; i++) {
-        //    //vyhodnoceni funkce pro radky sloupce
-        //    for (int j=0; j < PARAM_N; j++) {
-        //        in1 = in[*chrom];
-        //        in1const = *chrom++;
-        //        in2 = in[*chrom];
-        //        in2const = *chrom++;
-        //        fce = *chrom++;
-        //        switch (fce) {
-        //          case 0: *out++ = in1; break;              //in1
-        //          case 1: *out++ = in1 > in2 ? in1 : in2;   break; // min
-        //          case 2: *out++ = in1 < in2 ? in1 : in2;   break; // min
-        //          case 3: *out++ = in1 + in2;       break; // add
-        //          case 4: *out++ = in1 - in2;       break; // sub1
-        //          case 5: *out++ = in2 - in1;       break; // sub2
-        //          case 6: *out++ = in1 >> in2const; break; // shift1
-        //          case 7: *out++ = in2 >> in1const; break; // shift2
-        //          case 8: *out++ = in1 & in2;       break; // and
-        //          case 9: *out++ = in1 | in2;       break; // or
-        //          case 10: *out++ = in1 * in2;      break; // xor
-        //          case 11: *out++ = in1 ^ in2;      break; // xor
-        //          case 12: *out++ = ~in1;           break; // not in1
-        //          case 13: *out++ = ~in2;           break; // not in2
-        //          case 14: *out++ = in1 & ~in2;     break;
-        //          case 15: *out++ = ~(in1 & in2);   break; // nand
-        //          case 16: *out++ = ~(in1 | in2);   break; // nor
-        //          case 17: *out++ = 255;            break; // const max
-        //          default: ;
-        //             *out++ = 0; // 0
-        //        }
-        //    }
-        //}
-        // TODO cast to float
-        // Euclidian distance of the ouput from the true value
+        // value of chromosome for input
         res = compute_kernel(chrom, in);
-        //res = in[*chrom];
+        // distance from expected result
         distance = pow(res-ref_out,2);
         fitness[c] += distance; // > 2. ? 1.31+logf(distance) : distance;
-        //printf("chr%d fitness: %0.5f\n", c, fitness[c]);
     }
     return;
 }
 
+//-----------------------------------------------------------------------
+// POP_FITNESS
+//=======================================================================
+// chromosomes - array of chromosomes
+// input       - input image
+// ref_output  - expected result
+// fitness     - fitness of chromosomes
+//-----------------------------------------------------------------------
 void pop_fitness(chromosome *chromosomes, px *input, px *ref_output, float *fitness)
 {
     px *row0, *row1, *row2;
     // resul will be reduced from each side by 1 pixel with kerne 3x3
     px *in = new px[INP_SIZE+GEN_NUM+1]; // computation on one kernel
     px ref_out;
-    int num = 0;
+    int num = 0; // number of elements in sum
 
     memset(fitness, 0, POPULATION*sizeof(int));
     memset(in, 0, (INP_SIZE+GEN_NUM+1)*sizeof(px));
@@ -335,16 +323,25 @@ void pop_fitness(chromosome *chromosomes, px *input, px *ref_output, float *fitn
             // move input by a columnt
             row0++; row1++; row2++;
         }
+        // move to the next row
         row0++; row1++; row2++;
         row0++; row1++; row2++;
     }
     for (int idx = 0; idx < POPULATION; idx++){
-        fitness[idx] /= num;
+        fitness[idx] /= num; // MSE
     }
     delete[] in;
     return;
 }
 
+//-----------------------------------------------------------------------
+// SAVE_IMG
+//=======================================================================
+// logfname - name of a file
+// gen      - generation number
+// chrom    - chromosome
+// input    - input image
+//-----------------------------------------------------------------------
 void save_img(std::string logfname, int gen, chromosome chrom, px *input)
 {
     px *row0, *row1, *row2;
@@ -352,6 +349,7 @@ void save_img(std::string logfname, int gen, chromosome chrom, px *input)
     px *in = new px[INP_SIZE+GEN_NUM+1]; // computation on one kernel
     px *out = new px[OUT_ROWS*OUT_COLS];
     int num = 0;
+    // file name
     string filename = logfname+to_string(gen)+".data";
 
     row0 = input;
@@ -361,8 +359,6 @@ void save_img(std::string logfname, int gen, chromosome chrom, px *input)
     int idx = 0;
     for (int r = 0; r < OUT_ROWS; r++){
         for (int c = 0; c < OUT_COLS; c++){
-            // reference output imaga is extended on edges to match input size
-            // reference output for kernel
             // copy first n elems as input
             memcpy(in    , row0, KER_SIZE*sizeof(px));
             memcpy(in+3  , row1, KER_SIZE*sizeof(px));
@@ -374,20 +370,17 @@ void save_img(std::string logfname, int gen, chromosome chrom, px *input)
             // move input by a columnt
             row0++; row1++; row2++;
         }
+        // move to the next row
         row0++; row1++; row2++;
         row0++; row1++; row2++;
     }
 
+    // write result to the file
     const char *cstr = filename.c_str();
     ofstream img;
     img.open(cstr);
     img.write(reinterpret_cast<char *>(out), sizeof(px)*OUT_ROWS*OUT_COLS);
     img.close();
-    //for (int r=0; r< OUT_ROWS;r++){
-    //    for (int c=0; c< OUT_COLS;c++)
-    //        cout <<  out[OUT_ROWS*r+c] << ", ";
-    //    cout << endl;
-    //}
 
     delete[] in;
     delete[] out;
