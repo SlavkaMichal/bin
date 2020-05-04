@@ -162,26 +162,22 @@ int evolution(int run, string logfname, FILE *logfile, px *input, px *ref_output
     printf("Best chromosome: ");
     print_chrom(stdout, population[fitbest_idx]);
     save_img(logfname, generation, population[fitbest_idx], input);
-
-    if (fitbest == 0) {
-
-        //sprintf(fn, "_%d", run);
-        //logfname2 = logfname + string(fn);
-
-        //strcpy(fn, logfile.c_str());
-        //strcat(fn,".chr");
-        //FILE *chrfil = fopen(fn,"wb");
-        fprintf(logfile, DESCRIBTION);
-        print_chrom(logfile, population[fitbest_idx]);
-        //fclose(chrfil);
-    }
-
-    if (fitbest == 0)
-        return 1;
+    fprintf(logfile,"Best chromosome fitness: %f/0\n", fitbest);
+    fprintf(logfile,"Population fitness: %lf/0\n", fitpop_best);
+    fprintf(logfile,"pop fit worse: %d/%d\n", pop_worse_cnt, generation);
+    fprintf(logfile,"pop fit same: %d/%d\n", pop_same_cnt, generation);
+    fprintf(logfile,"chr best same: %d/%d\n", chr_same_cnt, generation);
+    fprintf(logfile,"chr best better: %d/%d\n", chr_better_cnt, generation);
+    fprintf(logfile,"chr best worse: %d/%d\n", chr_worse_cnt, generation);
+    fprintf(logfile,"Best chromosome: ");
+    print_chrom(stdout, population[fitbest_idx]);
 
     for (int i=0; i < POPULATION; i++)
         delete[] population[i];
     delete_sl_rndval(values);
+
+    if (fitbest == 0)
+        return 1;
 
     return 0;
 }

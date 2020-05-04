@@ -3,12 +3,12 @@
 
 #define DESCRIBTION "popis pokusu"
 #define POPULATION 16       //maximalni pocet jedincu populace orig. 5
-#define MUTATION_MAX 7         //max pocet genu, ktery se muze zmutovat behem jedne mutace (o 1 mensi!) orig 3
+#define MUTATION_MAX 5         //max pocet genu, ktery se muze zmutovat behem jedne mutace (o 1 mensi!) orig 3
 #define KER_SIZE 3
 
-#define PARAM_M 7           //pocet sloupcu
-#define PARAM_N 7            //pocet radku
-#define L_BACK  7           //1 (pouze predchozi sloupec)  .. param_m (maximalni mozny rozsah);
+#define PARAM_M  7        //pocet sloupcu
+#define PARAM_N  5           //pocet radku
+#define L_BACK   7          //1 (pouze predchozi sloupec)  .. param_m (maximalni mozny rozsah);
 // input image dimensions
 #define ROWS    128
 #define COLS    128
