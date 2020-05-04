@@ -190,10 +190,8 @@ px compute_kernel(chromosome chrom, px *in)
     for (int i=0; i < PARAM_M; i++) {
         //vyhodnoceni funkce pro radky sloupce
         for (int j=0; j < PARAM_N; j++) {
-            in1 = in[*chrom];
-            in1const = *chrom++;
-            in2 = in[*chrom];
-            in2const = *chrom++;
+            in1 = in[*chrom++];
+            in2 = in[*chrom++];
             fce = *chrom++;
             switch (fce) {
               case 0: *out++ = in1; break;              //in1
@@ -202,18 +200,16 @@ px compute_kernel(chromosome chrom, px *in)
               case 3: *out++ = in1 + in2;       break; // add
               case 4: *out++ = in1 - in2;       break; // sub1
               case 5: *out++ = in2 - in1;       break; // sub2
-              case 6: *out++ = in1 >> in2const; break; // shift1
-              case 7: *out++ = in2 >> in1const; break; // shift2
-              case 8: *out++ = in1 & in2;       break; // and
-              case 9: *out++ = in1 | in2;       break; // or
-              case 10: *out++ = in1 * in2;      break; // xor
-              case 11: *out++ = in1 ^ in2;      break; // xor
-              case 12: *out++ = ~in1;           break; // not in1
-              case 13: *out++ = ~in2;           break; // not in2
-              case 14: *out++ = in1 & ~in2;     break;
-              case 15: *out++ = ~(in1 & in2);   break; // nand
-              case 16: *out++ = ~(in1 | in2);   break; // nor
-              case 17: *out++ = 255;            break; // const max
+              case 6: *out++ = in1 & in2;       break; // and
+              case 7: *out++ = in1 | in2;       break; // or
+              case 8: *out++ = in1 * in2;      break; // xor
+              case 9: *out++ = in1 ^ in2;      break; // xor
+              case 10: *out++ = ~in1;           break; // not in1
+              case 11: *out++ = ~in2;           break; // not in2
+              case 12: *out++ = in1 & ~in2;     break;
+              case 13: *out++ = ~(in1 & in2);   break; // nand
+              case 14: *out++ = ~(in1 | in2);   break; // nor
+              case 15: *out++ = 255;            break; // const max
               default: ;
                  *out++ = 0; // 0
             }

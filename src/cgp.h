@@ -2,21 +2,22 @@
 #define CGP_H
 
 #define DESCRIBTION "popis pokusu"
-#define POPULATION 10       //maximalni pocet jedincu populace orig. 5
+#define POPULATION 16       //maximalni pocet jedincu populace orig. 5
 #define MUTATION_MAX 7         //max pocet genu, ktery se muze zmutovat behem jedne mutace (o 1 mensi!) orig 3
 #define KER_SIZE 3
 
 #define PARAM_M 7           //pocet sloupcu
 #define PARAM_N 7            //pocet radku
-#define L_BACK  5           //1 (pouze predchozi sloupec)  .. param_m (maximalni mozny rozsah);
+#define L_BACK  7           //1 (pouze predchozi sloupec)  .. param_m (maximalni mozny rozsah);
 // input image dimensions
 #define ROWS    128
 #define COLS    128
 
 #define VERBOSE 1
-#define PARAM_GENERATIONS 30000   //max. pocet generaci evoluce
-#define PARAM_RUNS 1            //max. pocet behu evoluce
-#define FUNCTIONS  17             //max. pocet pouzitych funkci bloku (viz fitness() )
+#define PARAM_GENERATIONS 100000   //max. pocet generaci evoluce
+#define NO_IMPROVEMENT_STOP 10000  //max. pocet generaci evoluce
+#define PARAM_RUNS 5               //max. pocet behu evoluce
+#define FUNCTIONS  16              //max. pocet pouzitych funkci bloku (viz fitness() )
 #define PERIODICLOGG  (PARAM_GENERATIONS/2) //po kolika krocich se ma vypsat populace
 #define xPERIODIC_LOG           //zda se ma vypisovat populace
 

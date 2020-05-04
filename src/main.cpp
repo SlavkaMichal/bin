@@ -91,9 +91,11 @@ int main(int argc,char* argv[]){
     }
 
     srand((unsigned) time(NULL)); //inicializace pseudonahodneho generatoru
+    string run_log;
     for (int run=0; run < PARAM_RUNS; run++){
+        run_log = logfname+to_string(run)+"_";
         try {
-            run_succ += evolution(run, logfname, logfile, input, ref_out);
+            run_succ += evolution(run, run_log, logfile, input, ref_out);
         } catch (std::bad_alloc&) {
             if (VERBOSE) cout << "Bad alloc catched" << endl;
             break;

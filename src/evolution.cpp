@@ -48,6 +48,7 @@ int evolution(int run, string logfname, FILE *logfile, px *input, px *ref_output
 
     found = false;
     int generation = 0;
+    int no_improvement_cnt = 0;
     int pop_worse_cnt = 0;
     int pop_same_cnt = 0;
     int chr_same_cnt = 0;
@@ -127,6 +128,16 @@ int evolution(int run, string logfname, FILE *logfile, px *input, px *ref_output
             chr_worse_cnt += 1;
         prev_fitbest = fitbest;
 
+        if (!log)
+             no_improvement_cnt += 1;
+        else
+             no_improvement_cnt = 0;
+
+        if (no_improvement_cnt > NO_IMPROVEMENT_STOP){
+            fprintf(logfile,"Early stopping\tGeneration:%d\n",generation);
+            printf("Early stopping\tGeneration:%d\n",generation);
+            break;
+        }
 
         if ((fitpop < fitpop_best) || (log)) {
             printf("Generation:%d\tPopFitness: %10.4f/0\n",generation,fitpop);
